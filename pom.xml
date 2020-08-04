@@ -6,6 +6,7 @@
         <module>mall-gateway</module>
         <module>mall-registry</module>
         <module>mall-admin</module>
+        <module>mall-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -28,6 +29,7 @@
         <mysql.version>8.0.21</mysql.version>
         <fastdfs.version>1.27.2</fastdfs.version>
         <common-langs.version>3.11</common-langs.version>
+        <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
     </properties>
 
     <dependencies>
@@ -78,8 +80,31 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <configuration>
+                    <configLocation>codestyle/checkstyle.xml</configLocation>
+                    <excludes>
+                    </excludes>
+                    <includes>
+                        **/*.java
+                    </includes>
+
+                    <consoleOutput>true</consoleOutput>
+                    <failOnViolation>true</failOnViolation>
+                    <failsOnError>true</failsOnError>
+                    <encoding>UTF-8</encoding>
+                    <skip>false</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>checkstyle</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
