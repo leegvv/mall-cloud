@@ -8,7 +8,11 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @SpringBootApplication
 public class MallRegistryApplication {
 
-    public static void main(String[] args) {
+    /**
+     * main函数.
+     * @param args 参数
+     */
+    public static void main(final String[] args) {
         SpringApplication.run(MallRegistryApplication.class, args);
     }
 

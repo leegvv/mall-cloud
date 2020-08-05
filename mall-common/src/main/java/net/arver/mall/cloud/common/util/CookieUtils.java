@@ -2,15 +2,13 @@ package net.arver.mall.cloud.common.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-/**
- * Cookie工具类
- */
+
 public final class CookieUtils {
 
     /**
@@ -21,15 +19,16 @@ public final class CookieUtils {
 
 
     private static void doSetCookie(final HttpServletRequest request, final HttpServletResponse response,
-                                          final String cookieName, String cookieValue,
-                                          final int cookieMaxAge, final String encodeString) {
+                                    final String cookieName, final String cookieValue,
+                                    final int cookieMaxAge, final String encodeString) {
         try {
+            String tempCookieValue = cookieValue;
             if (cookieValue == null) {
-                cookieValue = "";
+                tempCookieValue = "";
             } else {
-                cookieValue = URLEncoder.encode(cookieValue, encodeString);
+                tempCookieValue = URLEncoder.encode(tempCookieValue, encodeString);
             }
-            final Cookie cookie = new Cookie(cookieName, cookieValue);
+            final Cookie cookie = new Cookie(cookieName, tempCookieValue);
             if (cookieMaxAge > 0) {
                 cookie.setMaxAge(cookieMaxAge);
             }
@@ -38,13 +37,13 @@ public final class CookieUtils {
             }
             cookie.setPath("/");
             response.addCookie(cookie);
-        } catch (final Exception e) {
+        } catch (final UnsupportedEncodingException e) {
             LOGGER.error("Cookie Encode Error.", e);
         }
     }
 
     /**
-     * 得到cookie的域名
+     * 得到cookie的域名.
      * @param request request
      * @return 域名
      */
@@ -55,7 +54,9 @@ public final class CookieUtils {
             domainName = "";
         } else {
             serverName = serverName.toLowerCase();
-            serverName = serverName.substring(7);
+            // http://
+            final int httpProtocolHeaderLength = 7;
+            serverName = serverName.substring(httpProtocolHeaderLength);
             final int end = serverName.indexOf("/");
             serverName = serverName.substring(0, end);
             final String[] domains = serverName.split("\\.");
