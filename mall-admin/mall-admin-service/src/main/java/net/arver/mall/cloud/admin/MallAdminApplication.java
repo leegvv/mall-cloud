@@ -8,10 +8,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class MallAdminApplication {
 
-    /**
-     * main函数.
-     * @param args 参数
-     */
     public static void main(final String[] args) {
         SpringApplication.run(MallAdminApplication.class, args);
     }
