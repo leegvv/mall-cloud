@@ -37,13 +37,6 @@
         <property name="fileNamePattern" value="module\-info\.java$"/>
     </module>
 
-    <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
-    <module name="SuppressionFilter">
-        <property name="file" value="${org.checkstyle.sun.suppressionfilter.config}"
-                  default="checkstyle-suppressions.xml" />
-        <property name="optional" value="true"/>
-    </module>
-
     <!-- Checks that a package-info.java file exists for each package.     -->
     <!-- See https://checkstyle.org/config_javadoc.html#JavadocPackage -->
     <!--<module name="JavadocPackage"/>-->
@@ -81,12 +74,19 @@
 
     <!-- Checks for Headers                                -->
     <!-- See https://checkstyle.org/config_header.html   -->
-    <!-- <module name="Header"> -->
-    <!--   <property name="headerFile" value="${checkstyle.header.file}"/> -->
-    <!--   <property name="fileExtensions" value="java"/> -->
-    <!-- </module> -->
+     <!--<module name="Header">
+       <property name="headerFile" value="${checkstyle.header.file}"/>
+       <property name="fileExtensions" value="java"/>
+     </module> -->
+
+    <!-- Filter out Checkstyle warnings that have been suppressed with the @SuppressWarnings annotation -->
+    <module name="SuppressWarningsFilter" />
 
     <module name="TreeWalker">
+
+        <module name="SuppressionCommentFilter"/>
+        <!-- Make the @SuppressWarnings annotations available to Checkstyle -->
+        <module name="SuppressWarningsHolder" />
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/config_javadoc.html -->
@@ -95,6 +95,7 @@
         <module name="MissingJavadocMethod">
             <property name="scope" value="private"/>
             <property name="ignoreMethodNamesRegex" value="^main$"/>
+            <property name="allowMissingPropertyJavadoc" value="true"/>
         </module>
         <module name="JavadocType">
             <property name="authorFormat" value="\S"/>
@@ -166,7 +167,11 @@
         <!-- See https://checkstyle.org/config_coding.html -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+        <module name="HiddenField">
+            <property name="ignoreSetter" value="true" />
+            <property name="ignoreConstructorParameter" value="true" />
+            <property name="setterCanReturnItsClass" value="true"/>
+        </module>
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="MagicNumber">
@@ -180,7 +185,7 @@
 
         <!-- Checks for class design                         -->
         <!-- See https://checkstyle.org/config_design.html -->
-        <module name="DesignForExtension"/>
+        <!--<module name="DesignForExtension"/>-->
         <module name="FinalClass"/>
         <!--<module name="HideUtilityClassConstructor"/>-->
         <module name="InterfaceIsType"/>
